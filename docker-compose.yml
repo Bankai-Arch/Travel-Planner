@@ -33,7 +33,7 @@ services:
       - /app/node_modules
 
   client:
-    build: ./client
+    build: .
     container_name: travel_client
     ports:
       - "3000:3000"

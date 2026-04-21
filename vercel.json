@@ -1,21 +1,11 @@
 {
   "version": 2,
-
-  "buildCommand": "cd server && npm install && npm run build && cd ../client && npm install && npm run build",
-  "outputDirectory": "client/.next",
-  "installCommand": "echo 'install handled per-directory in buildCommand'",
-
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "/api/index"
-    },
-    {
-      "source": "/((?!api/).*)",
-      "destination": "/$1"
+      "destination": "/api/index.js"
     }
   ],
-
   "functions": {
     "api/index.js": {
       "maxDuration": 30,
@@ -23,7 +13,6 @@
       "includeFiles": "server/dist/**"
     }
   },
-
   "headers": [
     {
       "source": "/api/(.*)",
@@ -34,9 +23,5 @@
         { "key": "Access-Control-Allow-Headers",     "value": "Authorization, Content-Type, X-Requested-With, Accept" }
       ]
     }
-  ],
-
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }

@@ -52,7 +52,6 @@ jspm_packages/
 
 # Next.js build output
 .next
-client/.next
 out
 
 # Nuxt.js build / generate output
