@@ -44,11 +44,11 @@ export default function HotelsPage() {
             onClick={() => update('minPrice', Math.max(0, (Number(filters.minPrice) || 0) - 500))}
             disabled={!filters.minPrice || Number(filters.minPrice) <= 0}
           >−</button>
-          <input type="number" step={500}
+          <input type="number" step={500} min={0}
             className="w-24 text-center py-2 text-sm focus:outline-none"
             placeholder="Min ₹"
             value={filters.minPrice}
-            onChange={e => update('minPrice', e.target.value)}
+            onChange={e => update('minPrice', Math.max(0, Number(e.target.value)).toString())}
           />
           <button
             className="px-2 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 font-bold transition"
@@ -62,11 +62,11 @@ export default function HotelsPage() {
             onClick={() => update('maxPrice', Math.max(0, (Number(filters.maxPrice) || 0) - 500))}
             disabled={!filters.maxPrice || Number(filters.maxPrice) <= 0}
           >−</button>
-          <input type="number" step={500}
+          <input type="number" step={500} min={0}
             className="w-24 text-center py-2 text-sm focus:outline-none"
             placeholder="Max ₹"
             value={filters.maxPrice}
-            onChange={e => update('maxPrice', e.target.value)}
+            onChange={e => update('maxPrice', Math.max(0, Number(e.target.value)).toString())}
           />
           <button
             className="px-2 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 font-bold transition"
