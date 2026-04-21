@@ -3,7 +3,7 @@ import Hotel from '../models/Hotel';
 import Review from '../models/Review';
 
 // ─── Get hotels with filters ──────────────────────────────────────────────────
-export const getHotels = async (req: Request, res: Response): Promise<void> => {
+export const getHotels = async (req: Request, res: Response) => {
   try {
     const {
       city, minPrice, maxPrice, rating, category,
@@ -11,7 +11,7 @@ export const getHotels = async (req: Request, res: Response): Promise<void> => {
     } = req.query;
 
     const filter: any = { available: true };
-    if (city)     filter.city = { $regex: city as string, $options: 'i' };
+    if (city) filter.city = { $regex: city as string, $options: 'i' };
     if (category) filter.category = category;
     if (minPrice || maxPrice) {
       filter.pricePerNight = {};
@@ -21,10 +21,10 @@ export const getHotels = async (req: Request, res: Response): Promise<void> => {
     if (rating) filter.rating = { $gte: Number(rating) };
 
     const sortMap: any = {
-      rating:        { rating: -1 },
-      price_low:     { pricePerNight: 1 },
-      price_high:    { pricePerNight: -1 },
-      reviews:       { reviewCount: -1 },
+      rating: { rating: -1 },
+      price_low: { pricePerNight: 1 },
+      price_high: { pricePerNight: -1 },
+      reviews: { reviewCount: -1 },
     };
 
     const skip = (Number(page) - 1) * Number(limit);
@@ -44,10 +44,10 @@ export const getHotels = async (req: Request, res: Response): Promise<void> => {
 };
 
 // ─── Get single hotel with reviews ───────────────────────────────────────────
-export const getHotel = async (req: Request, res: Response): Promise<void> => {
+export const getHotel = async (req: Request, res: Response) => {
   try {
     const hotel = await Hotel.findById(req.params.id);
-    if (!hotel) { res.status(404).json({ error: 'Hotel not found' }); return; }
+    if (!hotel) return res.status(404).json({ error: 'Hotel not found' });
 
     const reviews = await Review.find({ targetId: hotel._id, targetType: 'hotel' })
       .populate('userId', 'name avatar')
@@ -61,7 +61,7 @@ export const getHotel = async (req: Request, res: Response): Promise<void> => {
 };
 
 // ─── Create hotel (admin) ─────────────────────────────────────────────────────
-export const createHotel = async (req: Request, res: Response): Promise<void> => {
+export const createHotel = async (req: Request, res: Response) => {
   try {
     const hotel = await Hotel.create(req.body);
     res.status(201).json({ success: true, hotel });
@@ -71,10 +71,10 @@ export const createHotel = async (req: Request, res: Response): Promise<void> =>
 };
 
 // ─── Update hotel (admin) ─────────────────────────────────────────────────────
-export const updateHotel = async (req: Request, res: Response): Promise<void> => {
+export const updateHotel = async (req: Request, res: Response) => {
   try {
     const hotel = await Hotel.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-    if (!hotel) { res.status(404).json({ error: 'Hotel not found' }); return; }
+    if (!hotel) return res.status(404).json({ error: 'Hotel not found' });
     res.json({ success: true, hotel });
   } catch (err: any) {
     res.status(400).json({ error: err.message });

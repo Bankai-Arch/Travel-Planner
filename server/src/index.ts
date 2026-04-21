@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import mongoose from 'mongoose';
 import { createServer } from 'http';
 import { config } from './config/env';
 import { connectDB } from './config/db';
@@ -10,8 +11,8 @@ import authRoutes from './routes/auth';
 import tripRoutes from './routes/trips';
 import aiRoutes from './routes/ai';
 import hotelRoutes from './routes/hotels';
-import reviewRoutes  from './routes/reviews';
-import adminRoutes   from './routes/admin';
+import reviewRoutes from './routes/reviews';
+import adminRoutes from './routes/admin';
 import expenseRoutes from './routes/expenses';
 import { errorHandler } from './middleware/error';
 
@@ -25,12 +26,12 @@ app.use(express.json({ limit: '10mb' }));
 app.use(morgan('dev'));
 
 // Routes
-app.use('/api/auth',    authRoutes);
-app.use('/api/trips',   tripRoutes);
-app.use('/api/ai',      aiRoutes);
-app.use('/api/hotels',  hotelRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/trips', tripRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/hotels', hotelRoutes);
 app.use('/api/reviews', reviewRoutes);
-app.use('/api/admin',    adminRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/expenses', expenseRoutes);
 
 // Global error handler

@@ -8,9 +8,9 @@ import { getWeatherInfo } from '../utils/weather';
 const openai = new OpenAI({ apiKey: config.OPENAI_API_KEY });
 
 // ─── AI Trip Planner ──────────────────────────────────────────────────────────
-export const planTrip = async (req: AuthRequest, res: Response): Promise<void> => {
+export const planTrip = async (req: AuthRequest, res: Response) => {
   try {
-    const { destination, days, budget, interests = [], travelStyle = 'balanced' } = req.body as any;
+    const { destination, days, budget, interests = [], travelStyle = 'balanced' } = req.body;
 
     // Fetch weather context
     const weatherInfo = await getWeatherInfo(destination);
@@ -50,7 +50,7 @@ Use realistic Indian Rupee costs. Be specific with place names.`;
       model: 'gpt-4o',
       messages: [
         { role: 'system', content: systemPrompt },
-        { role: 'user',   content: userPrompt },
+        { role: 'user', content: userPrompt },
       ],
       response_format: { type: 'json_object' },
       temperature: 0.7,
@@ -60,7 +60,7 @@ Use realistic Indian Rupee costs. Be specific with place names.`;
 
     // Save to MongoDB
     const trip = await Trip.create({
-      userId:      req.user!.id,
+      userId: req.user!.id,
       destination,
       days,
       budget,
@@ -75,9 +75,9 @@ Use realistic Indian Rupee costs. Be specific with place names.`;
 };
 
 // ─── Streaming AI Chatbot ─────────────────────────────────────────────────────
-export const chat = async (req: AuthRequest, res: Response): Promise<void> => {
+export const chat = async (req: AuthRequest, res: Response) => {
   try {
-    const { message, history = [] } = req.body as any;
+    const { message, history = [] } = req.body;
 
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
@@ -112,9 +112,9 @@ Respond in the same language the user uses.`,
 };
 
 // ─── Budget Optimizer ─────────────────────────────────────────────────────────
-export const optimizeBudget = async (req: AuthRequest, res: Response): Promise<void> => {
+export const optimizeBudget = async (req: AuthRequest, res: Response) => {
   try {
-    const { destination, days, budget, priorities } = req.body as any;
+    const { destination, days, budget, priorities } = req.body;
 
     const response = await openai.chat.completions.create({
       model: 'gpt-4o',
