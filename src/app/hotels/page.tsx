@@ -37,13 +37,13 @@ export default function HotelsPage() {
           value={filters.city}
           onChange={e => update('city', e.target.value)}
         />
-        <input type="number"
+        <input type="number" step={500}
           className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-32 focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Min price ₹"
           value={filters.minPrice}
           onChange={e => update('minPrice', e.target.value)}
         />
-        <input type="number"
+        <input type="number" step={500}
           className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-32 focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Max price ₹"
           value={filters.maxPrice}
