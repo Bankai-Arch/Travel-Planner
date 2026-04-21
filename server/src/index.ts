@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import mongoose from 'mongoose';
 import { createServer } from 'http';
 import { config } from './config/env';
 import { connectDB } from './config/db';

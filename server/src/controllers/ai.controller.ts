@@ -8,9 +8,9 @@ import { getWeatherInfo } from '../utils/weather';
 const openai = new OpenAI({ apiKey: config.OPENAI_API_KEY });
 
 // ─── AI Trip Planner ──────────────────────────────────────────────────────────
-export const planTrip = async (req: AuthRequest, res: Response) => {
+export const planTrip = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { destination, days, budget, interests = [], travelStyle = 'balanced' } = req.body;
+    const { destination, days, budget, interests = [], travelStyle = 'balanced' } = req.body as any;
 
     // Fetch weather context
     const weatherInfo = await getWeatherInfo(destination);
@@ -75,9 +75,9 @@ Use realistic Indian Rupee costs. Be specific with place names.`;
 };
 
 // ─── Streaming AI Chatbot ─────────────────────────────────────────────────────
-export const chat = async (req: AuthRequest, res: Response) => {
+export const chat = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { message, history = [] } = req.body;
+    const { message, history = [] } = req.body as any;
 
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
@@ -112,9 +112,9 @@ Respond in the same language the user uses.`,
 };
 
 // ─── Budget Optimizer ─────────────────────────────────────────────────────────
-export const optimizeBudget = async (req: AuthRequest, res: Response) => {
+export const optimizeBudget = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { destination, days, budget, priorities } = req.body;
+    const { destination, days, budget, priorities } = req.body as any;
 
     const response = await openai.chat.completions.create({
       model: 'gpt-4o',

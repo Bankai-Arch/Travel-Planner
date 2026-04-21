@@ -3,7 +3,7 @@ import { AuthRequest } from '../middleware/auth';
 import Trip from '../models/Trip';
 
 // ─── Get user's trips ─────────────────────────────────────────────────────────
-export const getMyTrips = async (req: AuthRequest, res: Response) => {
+export const getMyTrips = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const trips = await Trip.find({
       $or: [{ userId: req.user!.id }, { collaborators: req.user!.id }],
@@ -16,19 +16,19 @@ export const getMyTrips = async (req: AuthRequest, res: Response) => {
 };
 
 // ─── Get single trip ──────────────────────────────────────────────────────────
-export const getTrip = async (req: AuthRequest, res: Response) => {
+export const getTrip = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const trip = await Trip.findById(req.params.id)
       .populate('userId', 'name avatar')
       .populate('collaborators', 'name avatar');
 
-    if (!trip) return res.status(404).json({ error: 'Trip not found' });
+    if (!trip) { res.status(404).json({ error: 'Trip not found' }); return; }
 
     // Allow owner, collaborators, or public trips
     const isOwner = (trip.userId as any)._id.toString() === req.user!.id;
     const isCollab = trip.collaborators.some((c: any) => c._id.toString() === req.user!.id);
     if (!isOwner && !isCollab && !trip.isPublic) {
-      return res.status(403).json({ error: 'Access denied' });
+      res.status(403).json({ error: 'Access denied' }); return;
     }
 
     res.json({ success: true, trip });
@@ -38,10 +38,10 @@ export const getTrip = async (req: AuthRequest, res: Response) => {
 };
 
 // ─── Update trip ──────────────────────────────────────────────────────────────
-export const updateTrip = async (req: AuthRequest, res: Response) => {
+export const updateTrip = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const trip = await Trip.findOne({ _id: req.params.id, userId: req.user!.id });
-    if (!trip) return res.status(404).json({ error: 'Trip not found or not authorized' });
+    if (!trip) { res.status(404).json({ error: 'Trip not found or not authorized' }); return; }
 
     Object.assign(trip, req.body);
     await trip.save();
@@ -53,10 +53,10 @@ export const updateTrip = async (req: AuthRequest, res: Response) => {
 };
 
 // ─── Delete trip ──────────────────────────────────────────────────────────────
-export const deleteTrip = async (req: AuthRequest, res: Response) => {
+export const deleteTrip = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const trip = await Trip.findOneAndDelete({ _id: req.params.id, userId: req.user!.id });
-    if (!trip) return res.status(404).json({ error: 'Trip not found or not authorized' });
+    if (!trip) { res.status(404).json({ error: 'Trip not found or not authorized' }); return; }
     res.json({ success: true, message: 'Trip deleted' });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
@@ -64,11 +64,11 @@ export const deleteTrip = async (req: AuthRequest, res: Response) => {
 };
 
 // ─── Invite collaborator ──────────────────────────────────────────────────────
-export const addCollaborator = async (req: AuthRequest, res: Response) => {
+export const addCollaborator = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { userId } = req.body;
     const trip = await Trip.findOne({ _id: req.params.id, userId: req.user!.id });
-    if (!trip) return res.status(404).json({ error: 'Trip not found' });
+    if (!trip) { res.status(404).json({ error: 'Trip not found' }); return; }
 
     if (!trip.collaborators.includes(userId)) {
       trip.collaborators.push(userId);
@@ -82,7 +82,7 @@ export const addCollaborator = async (req: AuthRequest, res: Response) => {
 };
 
 // ─── Popular public trips ─────────────────────────────────────────────────────
-export const getPublicTrips = async (req: AuthRequest, res: Response) => {
+export const getPublicTrips = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { destination, page = 1, limit = 9 } = req.query;
     const filter: any = { isPublic: true };
