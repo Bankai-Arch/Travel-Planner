@@ -37,18 +37,42 @@ export default function HotelsPage() {
           value={filters.city}
           onChange={e => update('city', e.target.value)}
         />
-        <input type="number" step={500}
-          className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-32 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Min price ₹"
-          value={filters.minPrice}
-          onChange={e => update('minPrice', e.target.value)}
-        />
-        <input type="number" step={500}
-          className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-32 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Max price ₹"
-          value={filters.maxPrice}
-          onChange={e => update('maxPrice', e.target.value)}
-        />
+        {/* Min Price Stepper */}
+        <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden text-sm">
+          <button
+            className="px-2 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 font-bold transition disabled:opacity-40"
+            onClick={() => update('minPrice', Math.max(0, (Number(filters.minPrice) || 0) - 500))}
+            disabled={!filters.minPrice || Number(filters.minPrice) <= 0}
+          >−</button>
+          <input type="number" step={500}
+            className="w-24 text-center py-2 text-sm focus:outline-none"
+            placeholder="Min ₹"
+            value={filters.minPrice}
+            onChange={e => update('minPrice', e.target.value)}
+          />
+          <button
+            className="px-2 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 font-bold transition"
+            onClick={() => update('minPrice', (Number(filters.minPrice) || 0) + 500)}
+          >+</button>
+        </div>
+        {/* Max Price Stepper */}
+        <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden text-sm">
+          <button
+            className="px-2 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 font-bold transition disabled:opacity-40"
+            onClick={() => update('maxPrice', Math.max(0, (Number(filters.maxPrice) || 0) - 500))}
+            disabled={!filters.maxPrice || Number(filters.maxPrice) <= 0}
+          >−</button>
+          <input type="number" step={500}
+            className="w-24 text-center py-2 text-sm focus:outline-none"
+            placeholder="Max ₹"
+            value={filters.maxPrice}
+            onChange={e => update('maxPrice', e.target.value)}
+          />
+          <button
+            className="px-2 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 font-bold transition"
+            onClick={() => update('maxPrice', (Number(filters.maxPrice) || 0) + 500)}
+          >+</button>
+        </div>
         <select value={filters.category} onChange={e => update('category', e.target.value)}
           className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
           {CATEGORIES.map(c => <option key={c} value={c === 'All' ? '' : c}>{c}</option>)}
